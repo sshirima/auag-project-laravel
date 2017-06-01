@@ -1,0 +1,2 @@
+<li role="presentation" class="{{ Request::is('commands') ? 'active' : '' }}"><a href="commands">View commands</a></li>
+<li role="presentation" class="{{ Request::is('command-actions') ? 'active' : '' }}"><a href="command-actions">Commands action</a></li>

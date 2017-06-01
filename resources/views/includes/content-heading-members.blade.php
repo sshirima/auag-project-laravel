@@ -1,0 +1,2 @@
+<li role="presentation" class="{{ Request::is('members') ? 'active' : '' }}"><a href="members">View members</a></li>
+<li role="presentation" class="{{ Request::is('members-import') ? 'active' : '' }}"><a href="members-import"> Import member file</a></li>

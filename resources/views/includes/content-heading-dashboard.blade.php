@@ -1,0 +1,2 @@
+<li role="presentation" class="{{ Request::is('dashboard') ? 'active' : ''|| Request::is('/') ? 'active' : '' }}"><a href="dashboard">Monitoring</a></li>
+<li role="presentation" class="{{ Request::is('device-settings') ? 'active' : '' }}"><a href="device-settings">Device settings</a></li>
