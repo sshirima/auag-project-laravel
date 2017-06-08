@@ -10,17 +10,33 @@
   | contains the "web" middleware group. Now create something great!
   |
  */
-Route::get('/', function () {
-    return view('dashboard-monitoring');
-});
+Route::get('/', [
+    'uses' => 'DashboardController@getDashboardMonitoring',
+    'as' => 'dashboard']);
 
-Route::get('/dashboard', function () {
-    return view('dashboard-monitoring');
-});
+Route::get('/dashboard', [
+    'uses' => 'DashboardController@getDashboardMonitoring',
+    'as' => 'dashboard']);
 
-Route::get('/device-settings', function () {
-    return view('dashboard-device-settings');
-});
+Route::get('/dashboard/smsd/start', [
+    'uses' => 'DashboardController@smsdStart',
+    'as' => '/dashboard/smsd/start']);
+
+Route::get('/dashboard/smsd/stop', [
+    'uses' => 'DashboardController@smsdStop',
+    'as' => '/dashboard/smsd/stop']);
+
+Route::post('/dashboard/smsd/saveconfig', [
+    'uses' => 'DashboardController@smsdSaveConfig',
+    'as' => '/dashboard/smsd/saveconfig']);
+
+Route::post('/dashboard/gammu/saveconfig', [
+    'uses' => 'DashboardController@gammuSaveConfig',
+    'as' => '/dashboard/gammu/saveconfig']);
+
+Route::get('/device-settings', [
+    'uses' => 'DashboardController@getDashboardSettings',
+    'as' => '/device-settings']);
 
 Route::get('/members', function () {
     return view('members-view');

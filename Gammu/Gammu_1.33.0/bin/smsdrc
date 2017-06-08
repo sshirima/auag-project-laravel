@@ -1,0 +1,37 @@
+# Configuration file for Gammu SMS Daemon
+# Gammu library configuration, see gammurc(5)
+
+[gammu]
+# Please configure this!
+device = com13
+connection = at15200
+#logfile = /var/log/gammu.log
+#Debugging
+#logformat = textall
+
+# SMSD configuration, see gammu-smsdrc(5)
+[smsd]
+logfile = C:\xampp\htdocs\laravel\Gammu\Gammu_1.33.0\bin\logs\smsdlog
+#RunOnReceive = /var/www/html/smsdapp/shellscript/onreceivesms.sh 
+
+# Increase for debugging information
+debuglevel = 1
+
+# Paths where messages are stored
+inboxpath = smsd/spool/sms/inbox/
+outboxpath = smsd/spool/sms/outbox/
+sentsmspath = smsd/spool/sms/sent/
+errorsmspath = smsd/spool/sms/error/
+inboxformat = unicode
+transmitformat = auto
+outboxformat = detail
+
+#mysql connnection
+Service = sql
+Driver = odbc
+Host = mysql_dsn
+SQL = mysql
+User = root
+Password =    root
+Database = smsd
+CheckSecurity = 0
