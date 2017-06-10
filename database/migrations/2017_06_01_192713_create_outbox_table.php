@@ -24,15 +24,15 @@ class CreateOutboxTable extends Migration {
             $table->text('Text')->nullable(); //Done
             $table->string('DestinationNumber', 20)->default('');
             $table->enum('Coding', ['Default_No_Compression', 'Unicode_No_Compression', '8bit', 'Default_Compression', 'Unicode_Compression'])->default('Default_No_Compression'); //Done
-            $table->text('UDH'); //Done
-            $table->interger('Class')->default(-1);
-            $table->text('TextDecoded')->default('');
+            $table->text('UDH')->nullable(); //Done
+            $table->integer('Class')->default(-1)->nullable();
+            $table->text('TextDecoded');
             $table->increments('ID'); //Done
-            $table->enum('MultiPart', ['false', 'true'])->default('false'); //Done
-            $table->integer('RelativeValidity')->default(-1); //Done
-            $table->string('SenderID', 255); //Done
+            $table->enum('MultiPart', ['false', 'true'])->default('false')->nullable(); //Done
+            $table->integer('RelativeValidity')->default(-1)->nullable(); //Done
+            $table->string('SenderID', 255)->nullable(); //Done
             $table->timestamp('SendingTimeOut')->nullable(); //Done
-            $table->enum('DeliveryReport', ['default','yes','no'])->default('default'); //Done
+            $table->enum('DeliveryReport', ['default','yes','no'])->default('default')->nullable(); //Done
             $table->text('CreatorID'); //Done
             //Create indexes
             $table->index(['SendingDateTime','SendingTimeOut'], 'outbox_date');

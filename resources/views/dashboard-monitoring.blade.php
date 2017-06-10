@@ -28,6 +28,13 @@ Dashboard
             No an array
             {{$phones}}
             @endif
+            <div hidden style="border: 1px solid #a1a1a1;margin-top: 15px;padding: 10px;" class="alert" id="dv_phone_status">
+
+            </div>
+            <button id="btn_identify" class="btn btn-primary" value="stopped">
+                Identify modem
+            </button>
+
         </fieldset>
     </div> 
     <div class="col-md-6" >
@@ -55,5 +62,11 @@ Dashboard
         <input id="_token" name="_token" type="hidden" value="{{ Session::token()}}">
     </div>
 </div>
+<script>
+    var urlIdentifyModem = '{{ route('identifymodem')}}';
+    var urlStartSmsd = '{{ route('/dashboard/smsd/start')}}';
+    var urlStopSmsd = '{{ route('/dashboard/smsd/stop')}}';
+    var token = '{{ Session::token()}}';
+</script>
 <script type="text/javascript" src="{{ URL::asset('js/app-dashboard-monitoring.js') }}"></script>
 @endsection

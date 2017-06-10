@@ -17,7 +17,7 @@ class DashBoardController extends Controller {
     }
 
     public function getSMSServiceStatus() {
-        $response = SMSService::getStatus('tasklist /FI "IMAGENAME eq gammu-smsd.exe"');
+        $response = SMSService::getSMSServiceStatus();
         if (preg_match("/No tasks/", $response)) {
             $message = ['state' => 'stopped', 'content' => $response];
         } else if (preg_match("/PID/", $response)) {
@@ -47,7 +47,7 @@ class DashBoardController extends Controller {
                 $isRunning = TRUE;
                 $response = $status['pid'];
             } else {
-                SMSService::smsdStart('C:\xampp\htdocs\laravel\Gammu\Gammu_1.33.0\bin\gammu-smsd.exe -c C:\xampp\htdocs\laravel\Gammu\Gammu_1.33.0\bin\smsdrc');
+                SMSService::smsdStart();
             }
         }
         return response()->json(['status' => 'started', 'pid' => $response]);
@@ -55,7 +55,7 @@ class DashBoardController extends Controller {
 
     public function smsdStop() {
         //taskkill /IM gammu-smsd.exe /F
-        $response = SMSService::smsdStop('taskkill /IM gammu-smsd.exe /F');
+        $response = SMSService::smsdStop();
         return response()->json(['status' => 'stopped', 'response' => $response]);
     }
 
@@ -85,6 +85,25 @@ class DashBoardController extends Controller {
         } else {
              $response = ['status' => 'FAIL'];
         }
+        return response()->json(['response' => $response]);
+    }
+    
+    public function postModemIdentify(){
+        $smsService = new SMSService();
+        $status = $this->getSMSServiceStatus();
+        $wasRunning = FALSE;
+        
+        if ($status['state'] == 'running') {
+            $this->smsdStop();
+            $wasRunning = TRUE;
+        }
+        
+        $response = $smsService->identifyModem();
+        
+        if ($wasRunning){
+            $this->smsdStart();
+        }
+        
         return response()->json(['response' => $response]);
     }
 }

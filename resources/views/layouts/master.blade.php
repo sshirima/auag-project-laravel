@@ -43,6 +43,7 @@
                         </ul>
                     </div>
                     <div class="panel-body">
+                        @include('includes.content-body-fieldset-table')
                         @yield('content-body')
                     </div>
                 </div>

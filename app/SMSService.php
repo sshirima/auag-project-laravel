@@ -33,7 +33,7 @@ class SMSService {
         
     }
 
-    public static function getStatus($command) {
+    public static function runCommand($command) {
         $process = new Process($command);
         $process->setTimeout(3600);
         $process->run();
@@ -43,7 +43,13 @@ class SMSService {
         return $process->getOutput();
     }
 
-    public static function smsdStart($command) {
+    public static function getSMSServiceStatus() {
+        $command = 'tasklist /FI "IMAGENAME eq gammu-smsd.exe"';
+        return SMSService::runCommand($command);
+    }
+
+    public static function smsdStart() {
+        $command = 'C:\xampp\htdocs\laravel\Gammu\Gammu_1.33.0\bin\gammu-smsd.exe -c C:\xampp\htdocs\laravel\Gammu\Gammu_1.33.0\bin\smsdrc';
         if (substr(php_uname(), 0, 7) == "Windows") {
             pclose(popen("start /B " . $command, "r"));
         } else {
@@ -51,7 +57,8 @@ class SMSService {
         }
     }
 
-    public static function smsdStop($command) {
+    public static function smsdStop() {
+        $command = 'taskkill /IM gammu-smsd.exe /F';
         $process = new Process($command);
         $process->setTimeout(3600);
         $process->run();
@@ -68,8 +75,8 @@ class SMSService {
         $this->readConfigFile($filename);
         return json_encode($this);
     }
-    
-    private function readConfigFile($filename){
+
+    private function readConfigFile($filename) {
         while (!$filename->eof()) {
             $linetext = $filename->fgets();
             if (StringManipulator::str_starts_with($linetext, 'logfile')) {
@@ -128,7 +135,7 @@ class SMSService {
             }
         }
     }
-    
+
     public function saveSmsdConfigs($configs) {
         $service = $configs['service'];
         $driver = $configs['driver'];
@@ -144,38 +151,38 @@ class SMSService {
         while (!feof($file_reading)) {
             $linetext = fgets($file_reading);
             if (StringManipulator::str_starts_with($linetext, 'Service')) {
-                $linetext = "Service = " . $service."\n";
+                $linetext = "Service = " . $service . "\n";
                 $replaced = true;
             }
             if (StringManipulator::str_starts_with($linetext, 'Driver')) {
-                $linetext = "Driver = " . $driver."\n";
+                $linetext = "Driver = " . $driver . "\n";
                 $replaced = true;
             }
             if (StringManipulator::str_starts_with($linetext, 'Host')) {
-                $linetext = "Host = " . $host."\n";
+                $linetext = "Host = " . $host . "\n";
                 $replaced = true;
             }
             if (StringManipulator::str_starts_with($linetext, 'SQL')) {
-                $linetext = "SQL = " . $sql."\n";
+                $linetext = "SQL = " . $sql . "\n";
                 $replaced = true;
             }
             if (StringManipulator::str_starts_with($linetext, 'User')) {
-                $linetext = "User = " . $username."\n";
+                $linetext = "User = " . $username . "\n";
                 $replaced = true;
             }
             if (StringManipulator::str_starts_with($linetext, 'Password')) {
-                $linetext = "Password = " . $password."\n";
+                $linetext = "Password = " . $password . "\n";
                 $replaced = true;
             }
             if (StringManipulator::str_starts_with($linetext, 'Database')) {
-                $linetext = "Database = " . $database."\n";
+                $linetext = "Database = " . $database . "\n";
                 $replaced = true;
             }
             fputs($file_writing, $linetext);
         }
         fclose($file_reading);
         fclose($file_writing);
-        
+
         if ($replaced) {
             unlink(SMSService::$FILEPATH);
             rename(SMSService::$FILEPATH_TEMP, SMSService::$FILEPATH);
@@ -194,19 +201,19 @@ class SMSService {
         $file_reading = fopen(SMSService::$FILEPATH, 'r');
         $file_writing = fopen(SMSService::$FILEPATH_TEMP, 'w');
         $responce = false;
-        
+
         while (!feof($file_reading)) {
             $linetext = fgets($file_reading);
             if (StringManipulator::str_starts_with($linetext, 'device')) {
-                $linetext = "device = " . $device."\n";
+                $linetext = "device = " . $device . "\n";
                 $replaced = true;
             }
             if (StringManipulator::str_starts_with($linetext, 'connection')) {
-                $linetext = "connection = " . $connection."\n";
+                $linetext = "connection = " . $connection . "\n";
                 $replaced = true;
             }
             if (StringManipulator::str_starts_with($linetext, 'logfile')) {
-                $linetext = "logfile = " . $logfile."\n";
+                $linetext = "logfile = " . $logfile . "\n";
                 $replaced = true;
             }
             fputs($file_writing, $linetext);
@@ -221,6 +228,53 @@ class SMSService {
             unlink(SMSService::$FILEPATH_TEMP);
         }
         return $responce;
+    }
+
+    public function identifyModem() {
+        $command = 'C:\xampp\htdocs\laravel\Gammu\Gammu_1.33.0\bin\gammu.exe -c C:\xampp\htdocs\laravel\Gammu\Gammu_1.33.0\bin\smsdrc --identify';
+        $response = shell_exec($command);
+        //Process output ot command
+        if (StringManipulator::str_starts_with($response, 'Device')) {
+            $status = 'OK';
+            $processed = $this->processoutput($response);
+        } else {
+            $status = 'FAIL';
+            $processed = $response;
+        }
+        return ['status' => $status, 'output' => $processed];
+    }
+
+    public function processoutput($response) {
+        $device='';
+        $manufacture='';
+        $model = '';
+        $firmaware = '';
+        $IMEI = '';
+        $IMSI = '';
+        $separator = "\n";
+        $line = strtok($response, $separator);
+        while ($line !== false) {
+            # do something with $line
+            if (StringManipulator::str_starts_with($line, 'Device')) {$device = StringManipulator::after(':', $line);
+            } else
+            if (StringManipulator::str_starts_with($line, 'Manufacturer')) {$manufacture = StringManipulator::after(':', $line);
+            } else
+            if (StringManipulator::str_starts_with($line, 'Model')) {$model = StringManipulator::after(':', $line);
+            } else
+            if (StringManipulator::str_starts_with($line, 'Firmware')) {$firmaware = StringManipulator::after(':', $line);
+            } else
+            if (StringManipulator::str_starts_with($line, 'IMEI')) {$IMEI = StringManipulator::after(':', $line);
+            } else
+            if (StringManipulator::str_starts_with($line, 'SIM')) {$IMSI = StringManipulator::after(':', $line);
+            }
+            $line = strtok($separator);
+        }
+        return ['Device'=>$device,
+            'Manufacturer'=>$manufacture,
+            'Model'=>$model,
+            'Firmware'=>$firmaware,
+            'IMEI'=>$IMEI,
+            'IMSI'=>$IMSI];
     }
 
 }

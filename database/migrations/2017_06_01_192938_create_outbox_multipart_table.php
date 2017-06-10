@@ -17,14 +17,13 @@ class CreateOutboxMultipartTable extends Migration
             $table->engine = 'MyISAM'; //Done
             $table->charset = 'utf8'; //Done
             $table->collation = 'utf8_general_ci'; //Done
-            $table->interger('Version')->default(-1);
-            $table->string('Text')->nullable();
+            $table->text('Text')->nullable();
             $table->enum('Coding', ['Default_No_Compression','Unicode_No_Compression','8bit','Default_Compression','Unicode_Compression'])->default('Default_No_Compression');
-            $table->text('UDH');
-            $table->integer('Class');
-            $table->text('TextDecoded')->default();
-            $table->integer('ID');
-            $table->increment('SequencePosition')->default(1);
+            $table->text('UDH')->nullable();
+            $table->integer('Class')->default(-1)->nullable();
+            $table->text('TextDecoded')->nullable();
+            $table->integer('ID')->default(0);
+            $table->integer('SequencePosition')->default(1);
             $table->primary(['ID', 'SequencePosition']);
         });
     }

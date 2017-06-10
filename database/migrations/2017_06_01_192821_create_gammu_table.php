@@ -17,7 +17,7 @@ class CreateGammuTable extends Migration
             $table->engine = 'MyISAM'; //Done
             $table->charset = 'utf8'; //Done
             $table->collation = 'utf8_general_ci'; //Done
-            $table->interger('Version')->default(-1);
+            $table->integer('Version')->default(0);
         });
     }
 

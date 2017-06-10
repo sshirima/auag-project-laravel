@@ -17,8 +17,8 @@ class CreatePbkGroupsTable extends Migration
             $table->engine = 'MyISAM'; //Done
             $table->charset = 'utf8'; //Done
             $table->collation = 'utf8_general_ci'; //Done
+            $table->text('Name');
             $table->increments('ID');
-            $table->text('Number');
         });
     }
 

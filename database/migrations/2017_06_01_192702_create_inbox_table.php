@@ -24,8 +24,8 @@ class CreateInboxTable extends Migration
             $table->enum('Coding', ['Default_No_Compression','Unicode_No_Compression','8bit','Default_Compression','Unicode_Compression'])->default('Default_No_Compression'); //Done
             $table->text('UDH'); //Done
             $table->string('SMSCNumber', 20)->default(''); //Done
-            $table->interger('Class')->default(-1);
-            $table->text('TextDecoded')->default('');
+            $table->integer('Class')->default(-1);
+            $table->text('TextDecoded');
             $table->increments('ID'); //Done
             $table->text('RecipientID'); //Done
             $table->enum('Processed',['false','true'])->default('false'); //Done

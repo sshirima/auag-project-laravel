@@ -55,7 +55,7 @@ function createTableCRUD(urlRead, urlCreate, urlUpdate, urlRemove,
         toolbar: [
             {
                 buttons: [
-                    {commandName: "insert", caption: "Add member"}
+                    {commandName: "insert", caption: "Add"}
                 ],
                 position: "top"
             }

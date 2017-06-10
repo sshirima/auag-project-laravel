@@ -34,6 +34,10 @@ Route::post('/dashboard/gammu/saveconfig', [
     'uses' => 'DashboardController@gammuSaveConfig',
     'as' => '/dashboard/gammu/saveconfig']);
 
+Route::get('/dashboard/identifymodem', [
+    'uses' => 'DashboardController@postModemIdentify',
+    'as' => 'identifymodem']);
+
 Route::get('/device-settings', [
     'uses' => 'DashboardController@getDashboardSettings',
     'as' => '/device-settings']);
@@ -92,5 +96,23 @@ Route::post('/members/upload', [
 Route::post('/members/import', [
     'uses' => 'MemberController@postImportMembers',
     'as' => '/members/import']);
+
+Route::post('/command/add', [
+    'uses' => 'CommandController@postAddCommand',
+    'as' => '/command/add']);
+
+Route::post('/command/update', [
+    'uses' => 'CommandController@postUpdateCommand',
+    'as' => '/command/update']);
+
+Route::post('/command/getAll', [
+    'uses' => 'CommandController@postGetAllCommands',
+    'as' => '/command/getAll']);
+
+Route::post('/command/remove', [
+    'uses' => 'CommandController@postDeleteCommand',
+    'as' => '/command/remove']);
+
+
 
 

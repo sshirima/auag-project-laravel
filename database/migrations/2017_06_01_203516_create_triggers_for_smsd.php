@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class CreateTriggersForSmsd extends Migration {
@@ -13,15 +11,15 @@ class CreateTriggersForSmsd extends Migration {
      */
     public function up() {
         DB::unprepared('
-            DELIMITER //
         CREATE TRIGGER inbox_timestamp BEFORE INSERT ON inbox
 FOR EACH ROW
 BEGIN
     IF NEW.ReceivingDateTime = "0000-00-00 00:00:00" THEN
         SET NEW.ReceivingDateTime = CURRENT_TIMESTAMP();
     END IF;
-END;// 
-CREATE TRIGGER outbox_timestamp BEFORE INSERT ON outbox
+END');
+
+        DB::unprepared('CREATE TRIGGER outbox_timestamp BEFORE INSERT ON outbox
 FOR EACH ROW
 BEGIN
     IF NEW.InsertIntoDB = "0000-00-00 00:00:00" THEN
@@ -33,9 +31,9 @@ BEGIN
     IF NEW.SendingTimeOut = "0000-00-00 00:00:00" THEN
         SET NEW.SendingTimeOut = CURRENT_TIMESTAMP();
     END IF;
-END;//
+END');
 
-CREATE TRIGGER phones_timestamp BEFORE INSERT ON phones
+        DB::unprepared('CREATE TRIGGER phones_timestamp BEFORE INSERT ON phones
 FOR EACH ROW
 BEGIN
     IF NEW.InsertIntoDB = "0000-00-00 00:00:00" THEN
@@ -44,9 +42,9 @@ BEGIN
     IF NEW.TimeOut = "0000-00-00 00:00:00" THEN
         SET NEW.TimeOut = CURRENT_TIMESTAMP();
     END IF;
-END;//
+END');
 
-CREATE TRIGGER sentitems_timestamp BEFORE INSERT ON sentitems
+        DB::unprepared('CREATE TRIGGER sentitems_timestamp BEFORE INSERT ON sentitems
 FOR EACH ROW
 BEGIN
     IF NEW.InsertIntoDB = "0000-00-00 00:00:00" THEN
@@ -55,10 +53,7 @@ BEGIN
     IF NEW.SendingDateTime = "0000-00-00 00:00:00" THEN
         SET NEW.SendingDateTime = CURRENT_TIMESTAMP();
     END IF;
-END;//
-
-DELIMITER ;
-        ');
+END');
     }
 
     /**
