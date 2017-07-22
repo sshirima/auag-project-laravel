@@ -4,6 +4,7 @@ namespace Modules\Accounting\Http\Controllers;
 
 use Modules\Accounting\Share;
 use Modules\Accounting\ShareOffer;
+use Modules\Accounting\ShareBid;
 use Modules\Accounting\Account;
 use Modules\Accounting\Member;
 use Illuminate\Http\Request;
@@ -104,7 +105,23 @@ class ShareController extends Controller {
                 $shareOffer->share[Share::$COL_UNIT] > $shareOffer[ShareOffer::$COL_SHARE_UNIT]) {
             $shareOffer->share[Share::$COL_AMOUNT_PURCHASED] = $shareOffer->share[Share::$COL_AMOUNT_PURCHASED] - $shareOffer[ShareOffer::$COL_SHARE_AMOUNT];
             $shareOffer->share[Share::$COL_UNIT] = $shareOffer->share[Share::$COL_UNIT] - $shareOffer[ShareOffer::$COL_SHARE_UNIT];
-            $shareOffer->share->save();
+            return $shareOffer->share->save();
+        } else {
+            return false;
+        }
+    }
+    
+    public static function onDeleteShareBid(ShareBid $shareBid) {
+        $shareBid->share[Share::$COL_AMOUNT_PURCHASED] = $shareBid->share[Share::$COL_AMOUNT_PURCHASED] + $shareBid[ShareBid::$COL_SHARE_AMOUNT];
+        $shareBid->share[Share::$COL_UNIT] = $shareBid->share[Share::$COL_UNIT] + $shareBid[ShareBid::$COL_SHARE_UNIT];
+        return $shareBid->share->save();
+    }
+    public static function onInsertShareBid(ShareBid $shareBid) {
+        if ($shareBid->share[Share::$COL_AMOUNT_PURCHASED] > $shareBid[ShareBid::$COL_SHARE_AMOUNT] &&
+                $shareBid->share[Share::$COL_UNIT] > $shareBid[ShareBid::$COL_SHARE_UNIT]) {
+            $shareBid->share[Share::$COL_AMOUNT_PURCHASED] = $shareBid->share[Share::$COL_AMOUNT_PURCHASED] - $shareBid[ShareBid::$COL_SHARE_AMOUNT];
+            $shareBid->share[Share::$COL_UNIT] = $shareBid->share[Share::$COL_UNIT] - $shareBid[ShareBid::$COL_SHARE_UNIT];
+            return $shareBid->share->save();
         } else {
             return false;
         }

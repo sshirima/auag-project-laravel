@@ -1,7 +1,7 @@
 
 var table;
 var columnNames = new Array('bid_id','bid_shareid','acc_name','bid_price','bid_units','bid_amount','share_currency','created_at');
-var columnTitles = new Array('Offer ID','ShareID','Account name','Price@unit','Units','Amount','Currency','Date purchased','Edit/Delete');
+var columnTitles = new Array('Offer ID','ShareID','Account name','Price@unit','Units','Amount','Currency','Date sold','Edit/Delete');
 
 
 $(document).ready(function () {

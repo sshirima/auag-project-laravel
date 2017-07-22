@@ -128,7 +128,7 @@ Route::group(['middleware' => 'web', 'prefix' => 'accounting', 'namespace' => 'M
     /**
      * ShareBids view Routes
      */
-    Route::get('/sharebid/getAll', [
+    Route::post('/sharebid/getAll', [
         'uses' => 'ShareBidController@getShareBidsAll',
         'as' => 'getAllShareBids']);
 
