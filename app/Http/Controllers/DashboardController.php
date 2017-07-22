@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Phone;
 use App\SMSService;
+use App\SMSProcessor;
 use Illuminate\Http\Request;
 
 class DashBoardController extends Controller {
@@ -105,5 +106,28 @@ class DashBoardController extends Controller {
         }
         
         return response()->json(['response' => $response]);
+    }
+    
+    public function startServer(Request $request){
+        $KEY_SEREVER_ISRUNNING = 'serverIsRunning';
+        $status = session($KEY_SEREVER_ISRUNNING, false);
+        $requestStatus = $request['status'];
+        if ($status){
+           if ($requestStatus ==='true'){
+                //Stop the server
+                session([$KEY_SEREVER_ISRUNNING=>false]);
+            } else {
+                //Process SMS
+                $smsprocessor = new SMSProcessor();
+                $smsprocessor->run();
+            }
+        }else {
+            if ($requestStatus ==='true'){
+                //Start the server
+                session([$KEY_SEREVER_ISRUNNING=>true]);
+            }
+        }
+        
+        return response()->json(['status'=> session($KEY_SEREVER_ISRUNNING, false)]);
     }
 }

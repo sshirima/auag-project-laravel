@@ -65,7 +65,7 @@ END');
             DB::unprepared('DROP TRIGGER `inbox_timestamp`');
             DB::unprepared('DROP TRIGGER `outbox_timestamp`');
             DB::unprepared('DROP TRIGGER `sentitems_timestamp`');
-            DB::unprepared('DROP TRIGGER `inbox_timestamp`');
+            DB::unprepared('DROP TRIGGER `phones_timestamp`');
         }
     }
 

@@ -31,7 +31,10 @@
         <div class="row" >
             @include('includes.header')
         </div>
-        <div class="row" style="padding: 20px">
+        <div class="row " style="padding: 10px">
+            @include('includes.actionbar')
+        </div>
+        <div class="row" style="padding: 10px">
             <div class="col-md-2">
                 @include('includes.sidebar')
             </div>

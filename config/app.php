@@ -177,7 +177,10 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
+        /*
+         * Nwidart service provider for laravel modules
+         */
+        Nwidart\Modules\LaravelModulesServiceProvider::class,
     ],
 
     /*
@@ -193,6 +196,7 @@ return [
 
     'aliases' => [
 
+        'Module' => Nwidart\Modules\Facades\Module::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'App' => Illuminate\Support\Facades\App::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,

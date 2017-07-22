@@ -7,8 +7,7 @@
 ; -----------------------------------------------------------------------------
 
 [gammu]
-
-device = com13
+device = com14
 connection = at115200
 ;Do not use model configuration unless you really need it
 ;model = 6110

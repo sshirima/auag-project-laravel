@@ -3,7 +3,7 @@
 
 [gammu]
 # Please configure this!
-device = com10
+device = com7
 connection = at115200
 #logfile = /var/log/gammu.log
 #Debugging
@@ -29,9 +29,9 @@ outboxformat = detail
 #mysql connnection
 Service = sql
 Driver = odbc
-Host = mysql_dsn
+Host = mysql_odbc
 SQL = mysql
 User = root
-Password =    root
+Password =     root
 Database = smsd
 CheckSecurity = 0

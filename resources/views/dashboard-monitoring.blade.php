@@ -36,6 +36,16 @@ Dashboard
             </button>
 
         </fieldset>
+        <div class="form-group" style="padding-top: 10px">
+                <span class="small-nav" data-toggle="tooltip" data-placement="right" >
+                    <button class="btn btn-primary" id="bt_start_SMS_process" value="false">
+                        <span class="small-nav" data-toggle="tooltip" data-placement="right" title="start_SMS_processor"> 
+                            <span class="fa fa-play"></span> 
+                        </span>
+                        <span class="full-nav"> </span>
+                    </button> 
+                </span>    
+        </div>
     </div> 
     <div class="col-md-6" >
         <fieldset style="border: 1px solid #a1a1a1;margin-top: 15px;padding: 10px;">
@@ -64,8 +74,11 @@ Dashboard
 </div>
 <script>
     var urlIdentifyModem = '{{ route('identifymodem')}}';
-    var urlStartSmsd = '{{ route('/dashboard/smsd/start')}}';
-    var urlStopSmsd = '{{ route('/dashboard/smsd/stop')}}';
+    var urlSMSProcessStatus = '{{ route('SMSProcessStatus')}}';
+            var urlStartSmsd = '{{ route('/dashboard/smsd/start')}}';
+            var urlStopSmsd = '{{ route('/dashboard/smsd/stop')}}';
+            var urlSMSProcessStart = '{{ route('SMSProcessStart')}}';
+            var urlSMSProcessStop = '{{ route('SMSProcessStop')}}';
     var token = '{{ Session::token()}}';
 </script>
 <script type="text/javascript" src="{{ URL::asset('js/app-dashboard-monitoring.js') }}"></script>

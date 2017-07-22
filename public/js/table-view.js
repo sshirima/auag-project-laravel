@@ -63,10 +63,10 @@ function createTableCRUD(urlRead, urlCreate, urlUpdate, urlRemove,
     });
 }
 
-function createTableReadOnly(membersData, tableColumns) {
+function createTableReadOnly(tableData, tableColumns) {
     $("#table-view").shieldGrid({
         dataSource: {
-            data: membersData
+            data: tableData
         },
         paging: true,
         selection: {

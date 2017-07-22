@@ -10,7 +10,17 @@
   | contains the "web" middleware group. Now create something great!
   |
  */
+
+/**
+ * Routes to modules
+ */
 Route::get('/', [
+    'as' => 'accounting',
+    function () {
+        return redirect('accounting');
+    }]);
+
+Route::get('/old', [
     'uses' => 'DashboardController@getDashboardMonitoring',
     'as' => 'dashboard']);
 
@@ -42,6 +52,26 @@ Route::get('/device-settings', [
     'uses' => 'DashboardController@getDashboardSettings',
     'as' => '/device-settings']);
 
+Route::post('/startServer', [
+    'uses' => 'DashboardController@startServer',
+    'as' => 'startServer']);
+
+Route::get('/SMSProcess/status', [
+    'uses' => 'SMSProcessorController@processStatus',
+    'as' => 'SMSProcessStatus']);
+
+Route::get('/SMSProcess/start', [
+    'uses' => 'SMSProcessorController@processStart',
+    'as' => 'SMSProcessStart']);
+
+Route::get('/SMSProcess/stop', [
+    'uses' => 'SMSProcessorController@processStop',
+    'as' => 'SMSProcessStop']);
+
+Route::get('/SMSProcess/run', [
+    'uses' => 'SMSProcessorController@processRun',
+    'as' => 'SMSProcessRun']);
+
 Route::get('/members', function () {
     return view('members-view');
 });
@@ -63,6 +93,35 @@ Route::get('/command-actions', function () {
 Route::get('/report', function () {
     return view('report');
 });
+Route::get('/report-SMSinbox', [
+    'as' => 'report-SMSinbox',
+    function () {
+        return view('report-SMSinbox');
+    }]);
+
+Route::get('/report-SMSsent', [
+    'as' => 'report-SMSsent',
+    function () {
+        return view('report-SMSsent');
+    }]);
+Route::get('/report-SMSoutbox', [
+    'as' => 'report-SMSoutbox',
+    function () {
+        return view('report-SMSoutbox');
+    }]);
+
+Route::get('/SMS/inbox/read', [
+    'uses' => 'InboxController@getAllMessages',
+    'as' => 'readInboxSMS']);
+
+Route::get('/SMS/sent/read', [
+    'uses' => 'SentItemController@getAllMessages',
+    'as' => 'readSentSMS']);
+
+Route::get('/SMS/outbox/read', [
+    'uses' => 'OutboxController@getAllMessages',
+    'as' => 'readOutboxSMS']);
+
 
 Route::post('/member/add', [
     'uses' => 'MemberController@postAddMember',
@@ -112,7 +171,3 @@ Route::post('/command/getAll', [
 Route::post('/command/remove', [
     'uses' => 'CommandController@postDeleteCommand',
     'as' => '/command/remove']);
-
-
-
-

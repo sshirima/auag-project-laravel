@@ -34,34 +34,6 @@ $(document).ready(function () {
             }
         });
     });
-
-//    $('#loadMember').on('click', function () {
-//        $.ajax({
-//            method: 'POST',
-//            url: urlLoad,
-//            data: {id: $('#id').val(), _token: token}
-//        }).done(function (msg) {
-//            console.log(JSON.stringify(msg));
-//            $('#id').val(msg.id);
-//            $('#firstname').val(msg.firstname);
-//            $('#lastname').val(msg.lastname);
-//            $('#phonenumber').val(msg.phonenumber);
-//        });
-//    });
-//    
-//    $('#updateMember').on('click', function (){
-//        $.ajax({
-//            method:'POST',
-//            url: urlUpdate,
-//            data:{id:$('#id').val(),firstname:$('#firstname').val(), lastname:$('#lastname').val(),phonenumber:$('#phonenumber').val(),_token:token}
-//        }).done(function(msg){
-//            console.log(JSON.stringify(msg));
-//            $('#id').val(msg.id);
-//            $('#firstname').val(msg.firstname);
-//            $('#lastname').val(msg.lastname);
-//            $('#phonenumber').val(msg.phonenumber);
-//        });
-//    });
 });
 
 

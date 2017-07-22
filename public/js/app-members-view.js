@@ -1,5 +1,6 @@
 $(document).ready(function () {
 
+    $('#content_table').show();
     $.ajaxSetup({headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
 
     var schemaFields = {

@@ -1,4 +1,4 @@
-<fieldset>
+<fieldset id="content_table" hidden>
     <legend>@yield('fieldset-legend')</legend>
     <p >@yield('fieldset-paragraph')</p>
     <div class="panel panel-default">
