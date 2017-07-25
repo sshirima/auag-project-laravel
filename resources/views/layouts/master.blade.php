@@ -12,7 +12,7 @@
         <!-- Bootstrap CDN -->
         <link href="{{ URL::asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
         <!-- JQuery CDN -->
-        <script src="{{ URL::asset('js/jquery.min.js') }}"></script>
+        <script src="{{ URL::asset('js/jquery-1.11.1.min.js') }}"></script>
         <!-- Javascript for bootstrap files -->
         <link src="{{ URL::asset('bootstrap/js/bootstrap.min.js') }}" rel="stylesheet">
         <!-- Font awesome cdn -->

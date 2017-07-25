@@ -6,6 +6,7 @@ use Modules\Accounting\Account;
 use Modules\Accounting\Member;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Validation\Rule;
 
 class LoanController extends Controller {
     
@@ -20,8 +21,7 @@ class LoanController extends Controller {
 
     public static function getLoanAll() {
         $loans = \Illuminate\Support\Facades\DB::table(Loan::$TABLENAME)
-            ->join(Account::$TABLENAME, Loan::$COL_ACCOUNT, '=', Account::$TABLENAME.'.'.Account::$COL_ID)
-            ->join(Member::$TABLENAME, Account::$TABLENAME.'.'.Account::$COL_MemberID, '=', Member::$TABLENAME.'.'.Member::$COL_ID)
+            ->join(Account::$TABLENAME, Loan::$COL_ACCOUNT, '=', Account::$TABLENAME.'.'.Account::$COL_ID)->join(Member::$TABLENAME, Account::$TABLENAME.'.'.Account::$COL_MemberID, '=', Member::$TABLENAME.'.'.Member::$COL_ID)
             ->select(Loan::$TABLENAME.'.'.Loan::$COL_ID,
                     Loan::$TABLENAME.'.'.Loan::$COL_ACCOUNT,
                     Loan::$TABLENAME.'.'.Loan::$COL_BALANCE,
@@ -32,8 +32,7 @@ class LoanController extends Controller {
                     Loan::$TABLENAME.'.'.Loan::$COL_PAID,
                     Loan::$TABLENAME.'.'.Loan::$COL_PROGRESS,
                     Loan::$TABLENAME.'.'.Loan::$COL_CREATED_AT,
-                   Member::$TABLENAME.'.'.Member::$COL_Firstname,
-                   Member::$TABLENAME.'.'.Member::$COL_Lastname)
+                    Account::$TABLENAME.'.'. Account::$COL_Name)
             ->get();
         return $loans;
     }
@@ -41,13 +40,14 @@ class LoanController extends Controller {
     public function loanAdd(Request $request) {
         $result = false;
         $this->validate($request, [
-            Loan::$COL_ACCOUNT => 'required'
+            Loan::$COL_ACCOUNT => 'required|unique:loans',
+            Loan::$COL_PRINCIPLE => 'required|numeric',
+            Loan::$COL_DURATION => 'required|numeric'
         ]);
 
-        $loan = new Loan();
-        $sh = self::putParamaters($request, $loan);
+        $loanRequest = new Loan();
 
-        if (self::addLoan($sh)) {
+        if (self::addLoan(self::putParamaters($request, $loanRequest))) {
             $result = true;
         }
 
@@ -58,16 +58,14 @@ class LoanController extends Controller {
        $result = false;
         $this->validate($request, [
             Loan::$COL_ID => 'required',
-            Loan::$COL_ACCOUNT => 'required'
+            Loan::$COL_PRINCIPLE => 'required|numeric',
+            Loan::$COL_ACCOUNT => ['required', Rule::unique('loans')->ignore($request[Loan::$COL_ID],Loan::$COL_ID)],
+            Loan::$COL_DURATION => 'required|numeric'
         ]);
-        
-        $submitedId = $request[Loan::$COL_ID];
 
-        $loan = Loan::find($submitedId);
-       
-        $sh = self::putParamaters($request, $loan);
-       
-        if ($sh->update()) {
+        $oldLoan = Loan::find($request[Loan::$COL_ID]);
+        
+        if (self::putParamaters($request, $oldLoan)->update()) {
             $result = true;
         }
 
@@ -79,12 +77,8 @@ class LoanController extends Controller {
         $this->validate($request, [
             Loan::$COL_ID => 'required'
         ]);
-
-        $submitedId = $request[Loan::$COL_ID];
-
-        $loan = Loan::find($submitedId);
         
-        if ($loan->delete()) {
+        if (Loan::find($request[Loan::$COL_ID])->delete()) {
             $result = true;
         }
         return response()->json(['response' => $result]);
@@ -92,7 +86,24 @@ class LoanController extends Controller {
     
     private static function putParamaters(Request $request, Loan $loan){
         $loan[Loan::$COL_ACCOUNT] = $request[Loan::$COL_ACCOUNT];
-        $loan[Loan::$COL_AMOUNT_PURCHASED] = $request[Loan::$COL_AMOUNT_PURCHASED];
+        $loan[Loan::$COL_PRINCIPLE] = $request[Loan::$COL_PRINCIPLE];
+        $loan[Loan::$COL_DURATION] = $request[Loan::$COL_DURATION];
+        
+        //Default values for loans
+        if (!$loan[Loan::$COL_PAID] > 0){
+            $loan[Loan::$COL_PAID] = 0;
+        }
+        $loan[Loan::$COL_RATE] = 15;
          return $loan;
+    }
+    
+    public static function onInsertLoanPayment(\Modules\Accounting\LoanPayment $loanPayment){
+        $loanPayment->loan[Loan::$COL_PAID] = $loanPayment->loan[Loan::$COL_PAID] + $loanPayment[\Modules\Accounting\LoanPayment::$COL_AMOUNT];
+        return $loanPayment->loan->save();
+    }
+    
+    public static function onDeleteLoanPayment(\Modules\Accounting\LoanPayment $loanPayment){
+        $loanPayment->loan[Loan::$COL_PAID] = $loanPayment->loan[Loan::$COL_PAID] - $loanPayment[\Modules\Accounting\LoanPayment::$COL_AMOUNT];
+        return $loanPayment->loan->save();
     }
 }

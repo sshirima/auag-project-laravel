@@ -23,6 +23,10 @@ class AccountController extends Controller {
                 ->get();
         return $accounts;
     }
+    
+    public static function getAccountByColumns($columns){
+        return Account::select($columns)->orderBy(Account::$COL_Name, 'asc')->get();
+    }
 
     public function accountAdd(Request $request) {
         $result = false;

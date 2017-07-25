@@ -46,24 +46,16 @@ class CreateLoansTable extends Migration
         END');
         
         DB::unprepared('CREATE TRIGGER `before_update_loan` BEFORE UPDATE ON `loans`
-        FOR EACH ROW 
-        BEGIN
-            IF (NEW.updated_at IS NULL) THEN
+ FOR EACH ROW BEGIN
+            IF (NEW.created_at IS NULL || NEW.updated_at IS NULL) THEN
+            SET NEW.created_at = CURRENT_TIMESTAMP();
             SET NEW.updated_at = CURRENT_TIMESTAMP();
             END IF;
             
-            IF NOT (NEW.loan_principle = OLD.loan_principle && NEW.loan_rate = OLD.loan_rate &&
-            NEW.loan_duration = OLD.loan_duration) THEN 
-             SET NEW.loan_interest = NEW.loan_principle * NEW.loan_rate * NEW.loan_duration/12/100;
-             SET NEW.loan_balance = NEW.loan_interest + NEW.loan_principle - NEW.loan_paid;
-             SET NEW.loan_progress = NEW.loan_paid/(NEW.loan_principle + NEW.loan_interest)*100;
-            END IF;
+            SET NEW.loan_interest = NEW.loan_principle * NEW.loan_rate * NEW.loan_duration/12/100;
             
-            IF NOT (NEW.loan_paid = OLD.loan_paid) THEN 
-               SET NEW.loan_balance = NEW.loan_interest + NEW.loan_principle - NEW.loan_paid;
-               SET NEW.loan_progress = NEW.loan_paid/(NEW.loan_principle + NEW.loan_interest)*100;
-            END IF;
-            
+            SET NEW.loan_balance = (NEW.loan_interest + NEW.loan_principle) - NEW.loan_paid;
+            SET NEW.loan_progress = NEW.loan_paid/(NEW.loan_principle + NEW.loan_interest);
         END');
         
         DB::unprepared('CREATE TRIGGER `after_update_loan` AFTER UPDATE ON `loans`

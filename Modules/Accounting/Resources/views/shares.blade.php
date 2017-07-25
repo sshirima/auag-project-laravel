@@ -1,6 +1,6 @@
 @extends('accounting::layouts.master-accounting')
 @section('title')
-Shares transactions
+Shares
 @endsection
 
 @section('module-body')

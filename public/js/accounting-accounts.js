@@ -80,6 +80,7 @@ function searchfield() {
             input = $("#filterbox input"),
             timeout,
             value;
+    
     input.on("keydown", function () {
         clearTimeout(timeout);
         timeout = setTimeout(function () {

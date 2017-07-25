@@ -1,165 +1,64 @@
 
 var table;
-
+var columns = [{name: 'loanpay_id', title: 'Ref#'},
+    {name: 'loanpay_loanid', title: 'Account'},
+    {name: 'acc_name', title: 'Account nameS'},
+    {name: 'loanpay_amount', title: 'Amount'},
+    {name: 'created_at', title: 'Date'},
+    {name: 'acc_currency', title: 'Currency'},
+    {name: '', title: 'Delete'}];
 
 $(document).ready(function () {
 
-    field1 = 'field1';
-    field2 = 'field2';
-    field3 = 'field3';
-    field4 = 'field4';
-    field5 = 'field5';
-    field6 = 'field6';
-    field7 = 'field7';
-
-    colName1 = 'acc_id';
-    colName2 = 'acc_name';
-    colName3 = 'loanpay_id';
-    colName4 = 'loanpay_loanid';
-    colName5 = 'loanpay_amount';
-    colName6 = 'created_at';
-    colName7 = 'acc_currency';
-
-    colTitle1 = 'Account ID';
-    colTitle2 = 'Account name';
-    colTitle3 = 'Pay ID';
-    colTitle4 = 'Loan ID';
-    colTitle5 = 'Amount';
-    colTitle6 = 'Date paid';
-    colTitle7 = 'Currency';
-
-    //Get members Ids
-    var accountsData = JSON.parse(accounts.replace(/&quot;/g,'"'));
-
-    accountIds = new Array(accountsData.length);
-    accountsData.forEach(function(account, index){
-        accountIds[index] = account.acc_id;
-    });
     createTable();
     //Important fields
-    tableDatasourceRemoteRead();
-    tableDatasourceRemoteModify();
     tableSchemaField();
     tableColumns();
+    
+    //Tootbar fields
+    table.toolbar[0].position = 'top';
+    table.toolbar[0].buttons[0] = {commandName: "insert", caption: 'New installment'};
+    //Disable modifying capability
+    table.dataSource.remote.modify.update = null;
+    //Disable click on the table
+    $("#rw_table").shieldGrid(table);
 
-    //Optional fields
-    tableEditing();
-    tableTool();
-    tableExportOptions();
-
-    $("#table-read-write").shieldGrid(table);
+    searchfield();
 });
 
-function tableDatasourceRemoteRead() {
-    table.dataSource.remote.read = {
-        url: urlTableRead,
-        type: "post",
-        dataType: "json"
-    };
-}
-
-function tableDatasourceRemoteModify() {
-    table.dataSource.remote.modify = {
-        create: {
-            url: urlTableAdd,
-            type: "post",
-            dataType: "json",
-            data: function (edited) {
-                return JSON.parse('{"' +
-                        colName2 + '": "' + edited[0].data[field2] + '","' +
-                        colName3 + '": "' + edited[0].data[field3] + '"}');
-            }
-        },
-        update: {
-            url: urlTableUpdate,
-            type: "post",
-            dataType: "json",
-            data: function (edited) {
-                return JSON.parse('{"' +
-                        colName1 + '": "' + edited[0].data[field1] + '","' +
-                        colName2 + '": "' + edited[0].data[field2] + '","' +
-                        colName3 + '": "' + edited[0].data[field3] + '"}');
-            }
-        },
-        remove: {
-            url: urlTableDelete,
-            type: "post",
-            data: function (removed) {
-                return JSON.parse('{"'+colName1+'": "'+removed[0].data[field1]+'"}');
-            }
-        }
-    };
-}
-
 function tableSchemaField() {
-    table.dataSource.schema.fields = {
-        field1: {path: colName1, type: Number},
-        field2: {path: colName2, type: String},
-        field3: {path: colName3, type: String},
-        field4: {path: colName4, type: String},
-        field5: {path: colName5, type: String},
-        field6: {path: colName6, type: String},
-        field7: {path: colName7, type: String}
-    };
+    var fields = {};
+    for (var i = 0; i < columns.length; i++) {
+        if (i === 4){
+            fields[columns[i].name] = {path: columns[i].name, type: String};
+        } else {
+            fields[columns[i].name] = {path: columns[i].name, type: String};
+        }
+    }
+    table.dataSource.schema.fields = fields;
 }
 
 function tableColumns() {
-    table.columns = [
-        {field: field1, title: colTitle1, width: "30px"},
-        {field: field2, title: colTitle2, width: "30px"},
-        {field: field3, title: colTitle3, width: "30px"},
-        {field: field4, title: colTitle4, width: "30px"},
-        {field: field5, title: colTitle5, width: "30px"},
-        {field: field6, title: colTitle6, width: "30px"},
-        {field: field7, title: colTitle7, width: "30px"}
-        
-    ];
-}
-
-function tableEditing() {
-    table.editing = {
-        enabled: true,
-        event: "click",
-        type: "row",
-        confirmation: {
-            "delete": {
-                enabled: true,
-                template: function (item) {
-                    return "Are you sure you want this loan?";
-                }
-            }
+    var rows = Array(columns.length);
+    var ig = 1;
+    for (var i = 1; i < columns.length; i++) {
+        if (i === 6) {
+            rows[i-ig] = {
+                width: "50px",
+                title: columns[6].title,
+                buttons: [
+                    {commandName: "edit", caption: ""},
+                    {commandName: "delete", caption: "Delete"}
+                ]
+            };
+        } else if (i === 1) {
+            rows[i-ig] = {field: columns[i].name, title: columns[i].title, width: "70px", editor: dropdownMenu};
+        } else {
+            rows[i-ig] = {field: columns[i].name, title: columns[i].title, width: "50px"};
         }
-    };
-}
 
-function tableTool() {
-    table.toolbar = [
-        {
-            buttons: [
-                
-            ],
-            position: "top"
-        }
-    ];
-}
-
-function tableExportOptions() {
-    var filename = 'transactions_shares';
-    table.exportOptions = {
-        proxy: "/filesaver/save",
-        excel: {
-            fileName: filename,
-            author: "Auag-application",
-            dataSource: {remote: {
-                    read: {
-                        url: urlTableRead,
-                        type: "post",
-                        dataType: "json"}
-                }
-            },
-            readDataSource: true
-        }
-    };
+    }
+    table.columns = rows;
 }
 
 function dropdownMenu(cell, item) {
@@ -167,10 +66,41 @@ function dropdownMenu(cell, item) {
             .appendTo(cell)
             .shieldDropDown({
                 dataSource: {
-                    data: accountIds
+                    data: JSON.parse(loan_account.replace(/&quot;/g, '"')),
+                    filter: {
+                        and: [
+                            {path: "loan_id", filter: "contains", value: ""}
+                        ]
+                    }
                 },
-                value: !item[colName1] ? null : item[colName1].toString()
-            }).swidget().focus();
+                textTemplate: function (item) {
+                    return item.acc_name;
+                },
+                valueTemplate: "{loan_id}"
+            }).
+            swidget().
+            focus();
 }
 
-
+function searchfield() {
+    var dataSource = $("#rw_table").swidget().dataSource,
+            input = $("#filterbox input"),
+            timeout,
+            value;
+    input.on("keydown", function () {
+        clearTimeout(timeout);
+        timeout = setTimeout(function () {
+            value = input.val();
+            if (value) {
+                dataSource.filter = {
+                    or: [
+                        {path: columns[2].name, filter: "contains", value: value}
+                    ]
+                };
+            } else {
+                dataSource.filter = null;
+            }
+            dataSource.read();
+        }, 300);
+    });
+}

@@ -20,5 +20,17 @@ class Account extends Model {
     public function member() {
         return $this->belongsTo('Modules\Accounting\Member', Account::$COL_MemberID);
     }
+    
+    public function shares(){
+        return $this->hasMany('Modules\Accounting\Share', Share::$COL_ACCOUNT, Account::$COL_ID);
+    }
+    
+    public function loans(){
+        return $this->hasMany('Modules\Accounting\Loan', Loan::$COL_ACCOUNT, Account::$COL_ID);
+    }
+    
+    public function fines(){
+        return $this->hasMany('Modules\Accounting\Fine', Fine::$COL_ACCOUNT, Account::$COL_ID);
+    }
 
 }

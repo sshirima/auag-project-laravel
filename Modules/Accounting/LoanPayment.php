@@ -3,6 +3,7 @@
 namespace Modules\Accounting;
 
 use Illuminate\Database\Eloquent\Model;
+use Modules\Accounting\Loan;
 
 class LoanPayment extends Model
 {
@@ -14,4 +15,9 @@ class LoanPayment extends Model
     public static $COL_UPDATED_AT = 'updated_at';
     
     protected $primaryKey = 'loanpay_id';
+    
+    public function loan()
+    {
+        return $this->belongsTo('Modules\Accounting\Loan', self::$COL_LOAN_ID, Loan::$COL_ID);
+    }
 }

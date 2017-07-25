@@ -33,7 +33,7 @@ class ShareController extends Controller {
     public function shareAdd(Request $request) {
         $result = false;
         $this->validate($request, [
-            Share::$COL_ACCOUNT => 'required'
+            Share::$COL_ACCOUNT => 'required|unique:shares'
         ]);
 
         $share = new Share();

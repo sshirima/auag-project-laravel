@@ -190,15 +190,15 @@ Route::group(['middleware' => 'web', 'prefix' => 'accounting', 'namespace' => 'M
         'as' => 'getAllLoanPayments']);
 
     Route::post('/loanpayment/add', [
-        'uses' => 'LoanPaymentController@loanPaymentAdd',
+        'uses' => 'LoanPaymentController@addLoanPayment',
         'as' => 'addLoanPayment']);
 
     Route::post('/loanpayment/update', [
-        'uses' => 'LoanPaymentController@loanPaymentUpdate',
+        'uses' => 'LoanPaymentController@updateLoanPayment',
         'as' => 'updateLoanPayment']);
 
     Route::post('/loanpayment/delete', [
-        'uses' => 'LoanPaymentController@loanPaymentDelete',
+        'uses' => 'LoanPaymentController@deleteLoanPayment',
         'as' => 'deleteLoanPayment']);
     
     /**

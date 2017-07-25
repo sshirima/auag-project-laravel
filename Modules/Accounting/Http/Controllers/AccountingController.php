@@ -8,6 +8,7 @@ use Illuminate\Routing\Controller;
 use Modules\Accounting\Http\Controllers\MemberController;
 use Modules\Accounting\Http\Controllers\AccountController;
 use Modules\Accounting\Http\Controllers\ShareOfferController;
+use Modules\Accounting\Account;
 
 class AccountingController extends Controller
 {
@@ -32,19 +33,19 @@ class AccountingController extends Controller
     
     public function displayShares(){
         //Load all members
-        $accounts = AccountController::getAccountAll();
+        $accounts = AccountController::getAccountByColumns(array(Account::$COL_ID, Account::$COL_Name));
             return view('accounting::shares', ['accounts'=> $accounts]);
     }
     
     public function displayLoans(){
         //Load all members
-        $accounts = AccountController::getAccountAll();
-            return view('accounting::loans', ['accounts'=> $accounts]);
+        $accounts = AccountController::getAccountByColumns(array(Account::$COL_ID, Account::$COL_Name));
+        return view('accounting::loans', ['accounts'=> $accounts]);
     }
     
     public function displayFines(){
         //Load all members
-        $accounts = AccountController::getAccountAll();
+        $accounts = AccountController::getAccountByColumns(array(Account::$COL_ID, Account::$COL_Name));
             return view('accounting::fines', ['accounts'=> $accounts]);
     }
     public function displayShareOffers(){
@@ -59,8 +60,8 @@ class AccountingController extends Controller
     }
     public function diplayLoanPayments(){
         //Load all members
-        $accounts = AccountController::getAccountAll();
-            return view('accounting::loanspayments', ['accounts'=> $accounts]);
+        $accounts = LoanPaymentController::getLoanAccount();
+            return view('accounting::loanspayments', ['loan_account'=> $accounts]);
     }
     public function displayFinePayments(){
         //Load all members

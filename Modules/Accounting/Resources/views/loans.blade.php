@@ -1,17 +1,20 @@
 @extends('accounting::layouts.master-accounting')
 @section('title')
-Shares transactions
+Loans
 @endsection
 
 @section('module-body')
 @include('accounting::includes.module-body-titlebar')
-<p >
-    Below table display information about loans taken by the group members.<br>
-    Each loan is associated with a specific member account, for more information click 
-<a href="#">here</a>
-
-</p>
-<div id="table-read-write" ></div>
+<br>
+<div  class="theme-light">
+    <div id="filterbox">
+        Search:
+        <input type="text" />
+        <a><img src="" /></a>
+    </div>
+    <br>
+    <div id="rw_table" ></div>
+</div>
 
 <script>
     var token = '{{ Session::token()}}';
