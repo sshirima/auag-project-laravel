@@ -4,7 +4,25 @@ var columnNames = new Array('id', 'firstname', 'lastname', 'phonenumber');
 var columnTitles = new Array('Member id', 'Firstname', 'Lastname', 'Phonenumber', 'Edit/Delete');
 
 $(document).ready(function () {
-
+    var gr = JSON.parse(group.replace(/&quot;/g, '"'));
+    $('#change_rate').on('click', function () {
+        $('#sp_value').html('<input type="text" id="in_rate" placeholder="' + gr.groupln_rate + '"/>');
+        $('#change_rate').html('Save');
+        $.ajax({
+            method: 'POST',
+            url: url_group_update,
+            data: {_token: token,
+                group_id: gr.group_id,
+                group_name: gr.group_name,
+                groupsh_price: gr.groupsh_price,
+                groupsh_max: gr.groupsh_max,
+                groupsh_duration: gr.groupsh_duration,
+                groupln_rate: ('#in_rate').val()
+            }
+        }).done(function (response) {
+            console.log(response);
+        });
+    });
     createTable();
     //Important fields
     tableSchemaField();
@@ -51,7 +69,7 @@ function tableColumns() {
     ];
 }
 
-function searchfield(){
+function searchfield() {
     var dataSource = $("#table-read-write").swidget().dataSource,
             input = $("#filterbox input"),
             timeout,

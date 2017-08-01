@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Modules\Accounting\Http\Controllers\MemberController;
+use Modules\Accounting\Http\Controllers\FineDescriptionController;
 use Modules\Accounting\Http\Controllers\AccountController;
 use Modules\Accounting\Http\Controllers\ShareOfferController;
 use Modules\Accounting\Account;
@@ -22,7 +23,9 @@ class AccountingController extends Controller
     }
     
     public function displayMembers(){
-            return view('accounting::members');
+        //Get group information
+        $group = GroupController::getGroupInfo();
+            return view('accounting::members',['group'=>$group]);
     }
     
     public function displayAccounts(){
@@ -46,7 +49,8 @@ class AccountingController extends Controller
     public function displayFines(){
         //Load all members
         $accounts = AccountController::getAccountByColumns(array(Account::$COL_ID, Account::$COL_Name));
-            return view('accounting::fines', ['accounts'=> $accounts]);
+        $fine_desc = FineDescriptionController::getFineDescAll();
+            return view('accounting::fines', ['accounts'=> $accounts,'fine_descriptions'=>$fine_desc]);
     }
     public function displayShareOffers(){
         //Load all members
@@ -65,8 +69,8 @@ class AccountingController extends Controller
     }
     public function displayFinePayments(){
         //Load all members
-        $accounts = AccountController::getAccountAll();
-            return view('accounting::finespayments', ['accounts'=> $accounts]);
+        $fines = FineController::getFinesWithAccount();
+            return view('accounting::finespayments', ['fines'=> $fines]);
     }
 
     /**

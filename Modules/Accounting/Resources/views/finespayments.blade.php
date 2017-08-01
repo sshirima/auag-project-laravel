@@ -6,7 +6,15 @@ Shares transactions
 @section('module-body')
 @include('accounting::includes.module-body-transactions-titlebar')
 <br>
-<div id="table-read-write" ></div>
+<div  class="theme-light">
+    <div id="filterbox">
+        Search:
+        <input type="text" />
+        <a><img src="" /></a>
+    </div>
+    <br>
+    <div id="rw_table" ></div>
+</div>
 
 <script>
     var token = '{{ Session::token()}}';
@@ -14,7 +22,7 @@ Shares transactions
     var urlTableAdd = '{{ route('addFinePayment')}}';
     var urlTableUpdate = '{{ route('updateFinePayment')}}';
     var urlTableDelete = '{{ route('deleteFinePayment')}}';
-    var accounts = '{{ $accounts }}';
+    var fines = '{{ $fines }}';
 </script>
 <!-- Read and Write table scr        ipt -->
 <script type="text/javascript" src="{{ URL::asset('js/table-read-write.js') }}"></script>

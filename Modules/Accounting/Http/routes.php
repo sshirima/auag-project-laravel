@@ -209,15 +209,19 @@ Route::group(['middleware' => 'web', 'prefix' => 'accounting', 'namespace' => 'M
         'as' => 'getAllFinePayments']);
 
     Route::post('/finepayment/add', [
-        'uses' => 'FinePaymentController@finePaymentAdd',
+        'uses' => 'FinePaymentController@addFinePayment',
         'as' => 'addFinePayment']);
 
     Route::post('/finepayment/update', [
-        'uses' => 'FinePaymentController@finePaymentUpdate',
+        'uses' => 'FinePaymentController@updateFinePayment',
         'as' => 'updateFinePayment']);
 
     Route::post('/finepayment/delete', [
-        'uses' => 'FinePaymentController@finePaymentDelete',
+        'uses' => 'FinePaymentController@deleteFinePayment',
         'as' => 'deleteFinePayment']);
+    
+    Route::post('/group/update', [
+        'uses' => 'GroupController@updateGroup',
+        'as' => 'updateGroup']);
     
 });

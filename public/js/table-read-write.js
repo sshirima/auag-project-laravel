@@ -126,7 +126,7 @@ function createTable() {
         toolbar: [
             {
                 buttons: [
-                    
+
                 ]
             }
         ],
@@ -136,36 +136,16 @@ function createTable() {
                 console.log("Resized " + e.field + " to " + e.width);
             },
             getCustomEditorValue: function (e) {
+                if (!$("#dropdown").swidget()._destroyed) {
                     e.value = $("#dropdown").swidget().value();
                     $("#dropdown").swidget().destroy();
+                }else
+                if(!$("#wg_second").swidget()._destroyed){
+                    e.value = $("#wg_second").swidget().value();
+                $("#wg_second").swidget().destroy();
                 }
+            }
         }
     };
-}
-
-function searchfield(column_to_filter) {
-    var dataSource = $("#rw_table").swidget().dataSource,
-            input = $("#filterbox input"),
-            timeout,
-            value;
-    input.on("keydown", function () {
-        clearTimeout(timeout);
-        timeout = setTimeout(function () {
-            value = input.val();
-            if (value) {
-                dataSource.filter = {
-                    or: [
-                        {path: columnNames[0], filter: "contains", value: value},
-                        {path: columnNames[1], filter: "contains", value: value},
-                        {path: columnNames[2], filter: "contains", value: value},
-                        {path: columnNames[3], filter: "contains", value: value}
-                    ]
-                };
-            } else {
-                dataSource.filter = null;
-            }
-            dataSource.read();
-        }, 300);
-    });
 }
 

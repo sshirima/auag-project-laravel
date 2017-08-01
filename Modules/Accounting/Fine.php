@@ -3,6 +3,8 @@
 namespace Modules\Accounting;
 
 use Illuminate\Database\Eloquent\Model;
+use Modules\Accounting\FineDescription;
+use Modules\Accounting\Account;
 
 class Fine extends Model
 {
@@ -18,6 +20,9 @@ class Fine extends Model
     protected $primaryKey= 'fine_id';
     
     public function account() {
-        return $this->belongsTo('Modules\Accounting\Account', Fine::$COL_ACCOUNT);
+        return $this->belongsTo('Modules\Accounting\Account', Fine::$COL_ACCOUNT, Account::$COL_ID);
+    }
+    public function finedescription() {
+        return $this->belongsTo('Modules\Accounting\FineDescription', Fine::$COL_DESCRIPTION, FineDescription::$COL_ID);
     }
 }

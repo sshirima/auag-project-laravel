@@ -9173,3 +9173,14 @@ Sat 2017/07/01 20:41:05 gammu-smsd[6672]: Message: Dear Samson your last name is
 Sat 2017/07/01 20:41:05 gammu-smsd[6672]: New message to send: 23
 Sat 2017/07/01 20:41:08 gammu-smsd[6672]: SMS sent on device: "com7" status=0, reference=118
 Sat 2017/07/01 20:41:08 gammu-smsd[6672]: Transmitted 23 (total: 1) to +255754710618
+Sat 2017/07/29 14:26:34 gammu-smsd[10268]: Using SQL service
+Sat 2017/07/29 14:26:34 gammu-smsd[10268]: Configuring Gammu SMSD...
+Sat 2017/07/29 14:26:34 gammu-smsd[10268]: Warning: No PIN code in C:\xampp\htdocs\laravel\Gammu\Gammu_1.33.0\bin\smsdrc file
+Sat 2017/07/29 14:26:34 gammu-smsd[10268]: CommTimeout=30, SendTimeout=30, ReceiveFrequency=0, ResetFrequency=0, HardResetFrequency=0
+Sat 2017/07/29 14:26:34 gammu-smsd[10268]: checks: CheckSecurity=1, CheckBattery=1, CheckSignal=1
+Sat 2017/07/29 14:26:34 gammu-smsd[10268]: mode: Send=1, Receive=1
+Sat 2017/07/29 14:26:34 gammu-smsd[10268]: deliveryreport = no
+Sat 2017/07/29 14:26:34 gammu-smsd[10268]: phoneid = 
+Sat 2017/07/29 14:26:34 gammu-smsd[10268]: Connected to driver myodbc5w.dll
+Sat 2017/07/29 14:26:34 gammu-smsd[10268]: Failed to seek to first row!
+Sat 2017/07/29 14:26:34 gammu-smsd[10268]: Initialisation failed, stopping Gammu smsd: Unknown error. (UNKNOWN[27])
